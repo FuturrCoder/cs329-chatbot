@@ -11,9 +11,8 @@ let mediaStream = null;
 let processor = null;
 let source = null;
 
-// Audio playback queue
-let audioQueue = [];
-let isPlaying = false;
+// Audio playback scheduling
+let nextPlayTime = 0;
 
 // AudioContext for playback
 let playContext = null;
@@ -50,6 +49,11 @@ startBtn.addEventListener('click', async () => {
             processor.connect(audioContext.destination);
 
             processor.onaudioprocess = (e) => {
+                // Mute mic if bot is talking
+                if (playContext && playContext.currentTime < nextPlayTime) {
+                    return;
+                }
+
                 const inputData = e.inputBuffer.getChannelData(0);
 
                 // Convert float32 to int16
@@ -152,6 +156,8 @@ function stopCall() {
         ws.close();
         ws = null;
     }
+
+    nextPlayTime = 0;
 }
 
 function playAudioBase64(base64) {
@@ -170,6 +176,7 @@ function playAudioBase64(base64) {
     }
 
     if (!playContext) return;
+    if (playContext.state === 'suspended') playContext.resume();
 
     const audioBuffer = playContext.createBuffer(1, float32Array.length, 24000);
     audioBuffer.copyToChannel(float32Array, 0);
@@ -177,7 +184,14 @@ function playAudioBase64(base64) {
     const source = playContext.createBufferSource();
     source.buffer = audioBuffer;
     source.connect(playContext.destination);
-    source.start();
+
+    // Schedule playback sequentially
+    if (nextPlayTime < playContext.currentTime) {
+        nextPlayTime = playContext.currentTime + 0.05; // small buffer
+    }
+
+    source.start(nextPlayTime);
+    nextPlayTime += audioBuffer.duration;
 }
 
 function addTranscript(text, role) {
