@@ -38,7 +38,7 @@ You are already set up for this user. The user's current profile is:
 
 Start the conversation acknowledging they are already set up and ask what they would like to do, according to the flowchart.
 `;
-        extraInstructions = `${preSetupState}\nCrucially: You are interacting with the user to collect data. The flowchart has grey boxes indicating data that you must extract. Whenever you hit a step in the conversation corresponding to one of these fields (ACTION, MEDICATION_NAME, FREQUENCY, TIME, START_DATE, METHOD, DETAILS, PHONE_NUMBER, CARETAKER_INFO), you MUST use the \`log_medication_data\` tool and log the fields you have collected so far. Do not wait until the very end, log them as you confirm them. Make sure to map the fields you've extracted into the tool properties.`;
+        extraInstructions = `${preSetupState}\nCrucially: You are interacting with the user to collect data. The flowchart has grey boxes indicating data that you must extract. Whenever you hit an ACTION block, you MUST immediately call the \`log_action_taken\` tool. Whenever you hit a step corresponding to other fields (MEDICATION_NAME, FREQUENCY, TIME, START_DATE, METHOD, DETAILS, PHONE_NUMBER, CARETAKER_INFO), you MUST use the \`log_medication_data\` tool and log the fields you have collected so far. Do not wait until the very end, log them as you confirm them. Make sure to map the fields you've extracted into the tool properties.`;
     } else {
         flowchartPath = path.join(__dirname, 'task1.mmd');
         extraInstructions = "Crucially: The system needs to log the collected information in the terminal. When you collect new information (NAME, MEDICATION_NAME, FREQUENCY, TIME, START_DATE, METHOD, DETAILS, PHONE_NUMBER, CARETAKER_INFO), you MUST use the log_medication_data tool.";
@@ -102,25 +102,39 @@ wss.on('connection', (ws, req) => {
             }];
         } else {
             tools = [{
-                functionDeclarations: [{
-                    name: "log_medication_data",
-                    description: "Logs collected medication and user information to the system. Call this whenever you gather new data like the user's name, medication name, frequency, time, or caretaker info.",
-                    parameters: {
-                        type: "OBJECT",
-                        properties: {
-                            action_taken: { type: "STRING", description: "The action the user is taking right now, if applicable. Must be one of: ADD_MEDICATION, CHANGE_MEDICATION, REMOVE_MEDICATION, ADD_CARETAKER, EDIT_CARETAKER, REMOVE_CARETAKER" },
-                            name: { type: "STRING", description: "The name of the user" },
-                            medication_name: { type: "STRING", description: "The name of the medication" },
-                            frequency: { type: "STRING", description: "How often the medication is taken" },
-                            time: { type: "STRING", description: "The time the medication is taken" },
-                            start_date: { type: "STRING", description: "When the reminders start" },
-                            method: { type: "STRING", description: "Message or Call reminder method" },
-                            details: { type: "STRING", description: "Additional instructions or dosage" },
-                            phone_number: { type: "STRING", description: "The caller's phone number" },
-                            caretaker_info: { type: "STRING", description: "Contact info for the caretaker" }
+                functionDeclarations: [
+                    {
+                        name: "log_medication_data",
+                        description: "Logs collected medication and user information to the system. Call this whenever you gather new data like the medication name, frequency, time, or caretaker info.",
+                        parameters: {
+                            type: "OBJECT",
+                            properties: {
+                                name: { type: "STRING", description: "The name of the user" },
+                                medication_name: { type: "STRING", description: "The name of the medication" },
+                                frequency: { type: "STRING", description: "How often the medication is taken" },
+                                time: { type: "STRING", description: "The time the medication is taken" },
+                                start_date: { type: "STRING", description: "When the reminders start" },
+                                method: { type: "STRING", description: "Message or Call reminder method" },
+                                details: { type: "STRING", description: "Additional instructions or dosage" },
+                                phone_number: { type: "STRING", description: "The caller's phone number" },
+                                caretaker_info: { type: "STRING", description: "Contact info for the caretaker" }
+                            }
+                        }
+                    },
+                    {
+                        name: "log_action_taken",
+                        description: "Logs the action the user has selected. Must be called immediately when the user confirms their intent.",
+                        parameters: {
+                            type: "OBJECT",
+                            properties: {
+                                action: {
+                                    type: "STRING",
+                                    description: "The action the user is taking right now. Must be exactly one of: ADD_MEDICATION, CHANGE_MEDICATION, REMOVE_MEDICATION, ADD_CARETAKER, EDIT_CARETAKER, REMOVE_CARETAKER"
+                                }
+                            }
                         }
                     }
-                }]
+                ]
             }];
         }
 
@@ -168,7 +182,7 @@ wss.on('connection', (ws, req) => {
             const toolResponses = [];
 
             for (const call of functionCalls) {
-                if (call.name === "log_medication_data" || call.name === "log_task2_data") {
+                if (call.name === "log_medication_data" || call.name === "log_task2_data" || call.name === "log_action_taken") {
                     console.log(`\n\x1b[32m=== COLLECTED INFORMATION (via Tool Call: ${call.name}) ===\x1b[0m`);
                     let logStr = "";
                     for (const [key, value] of Object.entries(call.args)) {
