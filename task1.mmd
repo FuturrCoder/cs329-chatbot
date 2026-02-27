@@ -1,0 +1,43 @@
+graph TD
+    classDef sys fill:#6ba4ff,stroke:#4a86e8,stroke-width:2px,color:#fff;
+    classDef usr fill:#767676,stroke:#595959,stroke-width:2px,color:#fff;
+
+    A["Hi! I'm Cheesecake, your medication<br>reminder assistant. What's your name?"]:::sys --> B["NAME"]:::usr
+    B --> C["Nice to meet you, NAME!<br>Let's add your first medication. Please<br>tell me the medication name."]:::sys
+    C --> D["MNAME"]:::usr
+    
+    M["Let's add your [ith] medication. Please<br>enter the medication name."]:::sys --> D
+    
+    D --> E["When should I remind you to take MEDICATION NAME?"]:::sys
+    E --> F["FREQUENCY, TIME"]:::usr
+    
+    F -- "if they miss something" --> G["On what date do you want your reminders to start?<br>OR<br>How often do you want to be reminded?<br>OR<br>At what time(s) do you want to be reminded?"]:::sys
+    G -- "if they miss something" --> G
+    G --> H["Would you like to add any details?<br>For example, you can tell us the<br>dosage or instructions for use"]:::sys
+    F --> H
+    
+    H --> I["How should I remind you?<br>• Press 1: Message Only<br>• Press 2: Call"]:::sys
+    
+    I -- "call, if first time" --> J["What phone number should<br>we call you at?"]:::sys
+    J --> K["Okay! We will METHOD you to take MNAME,<br>FREQUENCY at TIME, starting on DATE.<br>Additional details: DETAILS"]:::sys
+    I --> K
+    
+    K --> L["Would you like to add a [ith]<br>medication?<br>OPTIONS<br>• Press 1: Yes<br>• Press 2: No<br>• Press 3: View my medications"]:::sys
+    
+    L -- "yes" --> M
+    
+    L -- "view medications" --> N["I will:<br>• METHOD you to take MNAME, FREQUENCY at<br>TIME, starting on DATE. [If applicable] Additional details: DETAILS<br>• METHOD you to take MNAME, FREQUENCY at<br>TIME, starting on DATE. [If applicable] Additional details: DETAILS<br>..."]:::sys
+    N --> L
+    
+    L -- "no" --> O["Okay! I will:<br>• METHOD you to take MNAME, FREQUENCY at TIME,<br>starting on DATE<br>. [If applicable] Additional details: DETAILS<br>• METHOD you to take MNAME, FREQUENCY at TIME,<br>starting on DATE<br>. [If applicable] Additional details: DETAILS<br>..."]:::sys
+    
+    O --> P["Would you like to notify a<br>caregiver about your medication<br>status?<br>OPTIONS<br>• Press 1: Yes<br>• Press 2: No"]:::sys
+    
+    P -- "No" --> Q["Okay. Caregiver<br>notifications are off."]:::sys
+    P -- "Yes" --> R["What is your caregiver's<br>full name and phone<br>number?"]:::sys
+    
+    R --> S["CAREGIVER INFO"]:::usr
+    S --> T["Okay! Caregiver notifications are<br>enabled."]:::sys
+    
+    Q --> U["You're all set. You can manage your<br>settings anytime by texting us on<br>WhatsApp or calling this number."]:::sys
+    T --> U

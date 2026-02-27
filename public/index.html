@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Chatbot Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="container glass">
+        <header>
+            <h1>Voice Assistant</h1>
+            <p>Your AI companion for medication reminders.</p>
+        </header>
+        
+        <div class="status-indicator">
+            <div class="pulse-ring" id="pulseRing"></div>
+            <div class="mic-icon" id="micIcon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    <line x1="12" y1="19" x2="12" y2="22"></line>
+                </svg>
+            </div>
+            <span id="statusText">Ready to start</span>
+        </div>
+
+        <div class="controls">
+            <button id="startBtn" class="btn primary">Start Call</button>
+            <button id="endBtn" class="btn danger hidden">End Call</button>
+        </div>
+        
+        <div class="logs">
+            <h3>Transcript</h3>
+            <div id="transcriptBox"></div>
+        </div>
+    </div>
+
+    <!-- Web Audio processing -->
+    <script src="app.js"></script>
+</body>
+</html>
