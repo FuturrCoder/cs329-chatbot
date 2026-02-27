@@ -42,14 +42,14 @@ graph TD
     M -- "no" --> P["Okay!<br>I will remind you to take: MEDICATION_NAME, MEDICATION_NAME,<br>..., and MEDICATION_NAME"]:::blueBox
     O --> M
 
-    P --> Q["Would you like to notify a<br>caregiver about your medication<br>status?<br>OPTIONS<br>• Press 1: Yes<br>• Press 2: No"]:::blueBox
+    P --> Q["Would you like to notify a<br>caretaker about your medication<br>status?<br>OPTIONS<br>• Press 1: Yes<br>• Press 2: No"]:::blueBox
 
-    Q -- "No" --> R["Okay. Caregiver<br>notifications are off."]:::blueBox
+    Q -- "No" --> R["Okay. Caretaker<br>notifications are off."]:::blueBox
 
-    Q -- "Yes" --> S["What is your caregiver's<br>full name and phone<br>number?"]:::blueBox
+    Q -- "Yes" --> S["What is your caretaker's<br>full name and phone<br>number?"]:::blueBox
 
-    S --> T["CAREGIVER_INFO"]:::greyBox
-    T --> U["Okay! Caregiver notifications are<br>enabled."]:::blueBox
+    S --> T["CARETAKER_INFO"]:::greyBox
+    T --> U["Okay! Caretaker notifications are<br>enabled."]:::blueBox
 
     R --> V["You're all set. You can manage your<br>settings anytime by texting us on<br>WhatsApp or calling this number."]:::blueBox
     U --> V

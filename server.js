@@ -38,10 +38,10 @@ You are already set up for this user. The user's current profile is:
 
 Start the conversation acknowledging they are already set up and ask what they would like to do, according to the flowchart.
 `;
-        extraInstructions = `${preSetupState}\nCrucially: The system needs to log the collected information in the terminal. When you collect new information (MEDICATION_NAME, FREQUENCY, TIME, START_DATE, METHOD, DETAILS, PHONE_NUMBER, CAREGIVER_INFO), you MUST use the log_medication_data tool.`;
+        extraInstructions = `${preSetupState}\nCrucially: The system needs to log the collected information in the terminal. When you collect new information (MEDICATION_NAME, FREQUENCY, TIME, START_DATE, METHOD, DETAILS, PHONE_NUMBER, CARETAKER_INFO), you MUST use the log_medication_data tool.`;
     } else {
         flowchartPath = path.join(__dirname, 'task1.mmd');
-        extraInstructions = "Crucially: The system needs to log the collected information in the terminal. When you collect new information (NAME, MEDICATION_NAME, FREQUENCY, TIME, START_DATE, METHOD, DETAILS, PHONE_NUMBER, CAREGIVER_INFO), you MUST use the log_medication_data tool.";
+        extraInstructions = "Crucially: The system needs to log the collected information in the terminal. When you collect new information (NAME, MEDICATION_NAME, FREQUENCY, TIME, START_DATE, METHOD, DETAILS, PHONE_NUMBER, CARETAKER_INFO), you MUST use the log_medication_data tool.";
     }
 
     const flowchart = fs.readFileSync(flowchartPath, 'utf8');
@@ -104,10 +104,11 @@ wss.on('connection', (ws, req) => {
             tools = [{
                 functionDeclarations: [{
                     name: "log_medication_data",
-                    description: "Logs collected medication and user information to the system. Call this whenever you gather new data like the user's name, medication name, frequency, time, or caregiver info.",
+                    description: "Logs collected medication and user information to the system. Call this whenever you gather new data like the user's name, medication name, frequency, time, or caretaker info.",
                     parameters: {
                         type: "OBJECT",
                         properties: {
+                            action_taken: { type: "STRING", description: "The action the user is taking right now, if applicable. Must be one of: ADD_MEDICATION, CHANGE_MEDICATION, REMOVE_MEDICATION, ADD_CARETAKER, EDIT_CARETAKER, REMOVE_CARETAKER" },
                             name: { type: "STRING", description: "The name of the user" },
                             medication_name: { type: "STRING", description: "The name of the medication" },
                             frequency: { type: "STRING", description: "How often the medication is taken" },
@@ -116,7 +117,7 @@ wss.on('connection', (ws, req) => {
                             method: { type: "STRING", description: "Message or Call reminder method" },
                             details: { type: "STRING", description: "Additional instructions or dosage" },
                             phone_number: { type: "STRING", description: "The caller's phone number" },
-                            caregiver_info: { type: "STRING", description: "Contact info for the caregiver" }
+                            caretaker_info: { type: "STRING", description: "Contact info for the caretaker" }
                         }
                     }
                 }]

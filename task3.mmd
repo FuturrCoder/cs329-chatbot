@@ -2,35 +2,43 @@ graph TD
 %% Node Definitions
     A["Welcome. Press 1 for medication<br>settings, or press 2 for caretaker<br>settings."]
     B["Press 1: Add a medication<br>Press 2: Edit/remove a medication<br>Press 3: List medications"]
-    C["You have set up a caretaker. Their info is: CAREGIVER_INFO. <br>They will be notified when you<br>take your medication."]
+    ACTION_ADD_MEDICATION["ACTION: ADD_MEDICATION"]:::greyBox
+    ACTION_CHANGE_MEDICATION["ACTION: CHANGE_MEDICATION"]:::greyBox
+    ACTION_REMOVE_MEDICATION["ACTION: REMOVE_MEDICATION"]:::greyBox
+    ACTION_ADD_CARETAKER["ACTION: ADD_CARETAKER"]:::greyBox
+    ACTION_EDIT_CARETAKER["ACTION: EDIT_CARETAKER"]:::greyBox
+    ACTION_REMOVE_CARETAKER["ACTION: REMOVE_CARETAKER"]:::greyBox
+    C["You have set up a caretaker. Their info is: CARETAKER_INFO. <br>They will be notified when you<br>take your medication."]
     D["You do not have a<br>caretaker set up yet."]
     E["Press 1: Change your<br>caretaker<br>Press 2: Remove your<br>caretaker"]
     F["Are you sure you want to<br>remove your caretaker? They<br>will be no longer be notified<br>when you take your medication.<br>Press 1 to confirm, press 2 to cancel"]
     G["Okay, your caretaker<br>has been removed."]
     H["Okay."]
-    I["Please tell me your<br>caregiver's full name and<br>phone number"]
-    J["CAREGIVER_INFO"]
+    I["Please tell me your<br>caretaker's full name and<br>phone number"]
+    J["CARETAKER_INFO"]:::greyBox
     K["Okay! We will notify this person<br>when you take your medication, and<br>give them access to your<br>medication taking history."]
     L["Would you like to add a<br>caretaker?"]
-    M["Please tell me your caregiver's<br>full name and phone number"]
+    M["Please tell me your caretaker's<br>full name and phone number"]
     N["Okay, we will not<br>add a caretaker"]
     O["I will:<br>• METHOD you to take MEDICATION_NAME, FREQUENCY at TIME,<br>starting on START_DATE<br>• [If applicable] Additional details: DETAILS<br>• METHOD you to take MEDICATION_NAME, FREQUENCY at TIME,<br>starting on START_DATE<br>• [If applicable] Additional details: DETAILS<br>..."]
     P["Which medication do you<br>want to edit? Or press 1<br>to view medications."]
+    MEDICATION_NAME_FROM_P["MEDICATION_NAME"]:::greyBox
+    VIEW_MEDS_FROM_P["I will remind you to take:<br>MEDICATION_NAME, FREQUENCY at TIME<br>MEDICATION_NAME, FREQUENCY at TIME<br>..."]
     Q["Would you like to remove<br>or change the<br>medication?"]
     R["Okay, we will remove [MEDICATION_NAME]<br>from your list of reminders. Press 1<br>to confirm, or press 2 to cancel"]
     S["Removal canceled"]
     T["Medication removed."]
     U["Please tell me the medication name."]
-    MEDICATION_NAME["MEDICATION_NAME"]
+    MEDICATION_NAME["MEDICATION_NAME"]:::greyBox
     V["When should I remind you to take MEDICATION NAME?"]
-    W["FREQUENCY, TIME, START_DATE"]
+    W["FREQUENCY, TIME, START_DATE"]:::greyBox
     X["On what date do you want your reminders to start?<br>OR<br>How often do you want to be reminded?<br>OR<br>At what time(s) do you want to be reminded?"]
     Y["Would you like to add any details?<br>For example, you can tell us the<br>dosage or instructions for use"]
-    DETAILS["DETAILS"]
+    DETAILS["DETAILS"]:::greyBox
     Z["How should I remind you?<br>OPTIONS<br>• Press 1: Message Only<br>• Press 2: Call"]
-    METHOD["METHOD"]
+    METHOD["METHOD"]:::greyBox
     AA["What phone number should<br>we call you at?"]
-    PHONE_NUMBER["PHONE_NUMBER"]
+    PHONE_NUMBER["PHONE_NUMBER"]:::greyBox
     AB["Okay! We will METHOD you to take MEDICATION_NAME,<br>FREQUENCY at TIME, starting on START_DATE.<br>Additional details: DETAILS<br>Press 1 to confirm, or press 2 to redo this medication"]
     AC["Your medication<br>reminders for MEDICATION_NAME<br>have been changed."]
 
@@ -39,15 +47,18 @@ graph TD
     A -- caretaker, if they have one --> C
     A -- caretaker, if they don't have one --> D
 
-    B -- add --> U
+    B -- add --> ACTION_ADD_MEDICATION
+    ACTION_ADD_MEDICATION --> U
     B -- edit --> P
     B -- list --> O
 
     C --> E
     D --> L
 
-    E -- 1 --> I
-    E -- 2 --> F
+    E -- 1 --> ACTION_EDIT_CARETAKER
+    ACTION_EDIT_CARETAKER --> I
+    E -- 2 --> ACTION_REMOVE_CARETAKER
+    ACTION_REMOVE_CARETAKER --> F
 
     F -- 1 --> G
     F -- 2 --> H
@@ -55,16 +66,24 @@ graph TD
     I --> J
     J --> K
 
-    L -- yes --> M
+    L -- yes --> ACTION_ADD_CARETAKER
+    ACTION_ADD_CARETAKER --> M
     M --> J
     L -- no --> N
 
-    P --> Q
-    Q -- remove --> R
+    P -- "press 1" --> VIEW_MEDS_FROM_P
+    VIEW_MEDS_FROM_P --> P
+
+    P -- "chooses medication" --> MEDICATION_NAME_FROM_P
+    MEDICATION_NAME_FROM_P --> Q
+
+    Q -- remove --> ACTION_REMOVE_MEDICATION
+    ACTION_REMOVE_MEDICATION --> R
     R -- 1 --> T
     R -- 2 --> S
 
-    Q -- change --> U
+    Q -- change --> ACTION_CHANGE_MEDICATION
+    ACTION_CHANGE_MEDICATION --> U
 
     U --> MEDICATION_NAME
     MEDICATION_NAME --> V
@@ -89,5 +108,3 @@ graph TD
 %% Styling Classes
 classDef default fill:#3898f5,color:#fff,stroke:#2b79c9,stroke-width:1px;
 classDef greyBox fill:#6B7280,color:#fff,stroke:#4b5563,stroke-width:1px;
-
-class W,J,MEDICATION_NAME,DETAILS,METHOD,PHONE_NUMBER greyBox;
