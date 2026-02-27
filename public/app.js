@@ -4,6 +4,8 @@ const statusText = document.getElementById('statusText');
 const micIcon = document.getElementById('micIcon');
 const pulseRing = document.getElementById('pulseRing');
 const transcriptBox = document.getElementById('transcriptBox');
+const keypad = document.getElementById('keypad');
+const keyBtns = document.querySelectorAll('.key-btn');
 
 let ws = null;
 let audioContext = null;
@@ -21,6 +23,7 @@ startBtn.addEventListener('click', async () => {
     try {
         startBtn.classList.add('hidden');
         endBtn.classList.remove('hidden');
+        keypad.classList.remove('hidden');
         statusText.textContent = 'Connecting...';
 
         ws = new WebSocket(`ws://${window.location.host}/?task=${document.getElementById('taskSelect').value}`);
@@ -131,6 +134,7 @@ endBtn.addEventListener('click', stopCall);
 function stopCall() {
     startBtn.classList.remove('hidden');
     endBtn.classList.add('hidden');
+    keypad.classList.add('hidden');
     statusText.textContent = 'Call Ended. Ready to start.';
     micIcon.classList.remove('active');
     pulseRing.classList.remove('active');
@@ -200,3 +204,34 @@ function addTranscript(text, role) {
     transcriptBox.appendChild(p);
     transcriptBox.scrollTop = transcriptBox.scrollHeight;
 }
+
+// Keypad Interactions
+keyBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const key = btn.textContent;
+        addTranscript(`Pressed ${key}`, 'user');
+
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            // Cancel current playback on the client side immediately
+            if (playContext) {
+                playContext.close();
+                playContext = new (window.AudioContext || window.webkitAudioContext)({
+                    sampleRate: 24000
+                });
+                nextPlayTime = 0;
+            }
+
+            // Send text input to Gemini to interrupt
+            const message = {
+                clientContent: {
+                    turns: [{
+                        role: "user",
+                        parts: [{ text: key }]
+                    }],
+                    turnComplete: true
+                }
+            };
+            ws.send(JSON.stringify(message));
+        }
+    });
+});

@@ -215,6 +215,45 @@ header p {
     display: none !important;
 }
 
+/* Keypad */
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 24px;
+    width: 100%;
+    max-width: 250px;
+}
+
+.keypad.hidden {
+    display: none !important;
+}
+
+.key-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-main);
+    font-size: 24px;
+    font-weight: 500;
+    padding: 16px 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+}
+
+.key-btn:hover {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+.key-btn:active {
+    transform: translateY(0);
+}
+
 /* Logs */
 .logs {
     margin-top: 32px;
