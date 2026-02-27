@@ -20,7 +20,8 @@ graph TD
     F --> H["Would you like to add any details?<br>For example, you can tell us the<br>dosage or instructions for use"]:::blueBox
     G --> H
 
-    H --> I["How should I remind you?<br>OPTIONS<br>• Press 1: Message Only<br>• Press 2: Call"]:::blueBox
+    H --> H_RESPONSE["DETAILS"]:::greyBox
+    H_RESPONSE --> I["How should I remind you?<br>OPTIONS<br>• Press 1: Message Only<br>• Press 2: Call"]:::blueBox
 
     I -- "call, if first time" --> J["What phone number should<br>we call you at?"]:::blueBox
     J --> J_RESPONSE["PHONE_NUMBER"]:::greyBox
