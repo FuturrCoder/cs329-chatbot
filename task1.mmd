@@ -22,11 +22,12 @@ graph TD
 
     H --> H_RESPONSE["DETAILS"]:::greyBox
     H_RESPONSE --> I["How should I remind you?<br>OPTIONS<br>• Press 1: Message Only<br>• Press 2: Call"]:::blueBox
+    I --> I_RESPONSE["METHOD"]:::greyBox
 
-    I -- "call, if first time" --> J["What phone number should<br>we call you at?"]:::blueBox
+    I_RESPONSE -- "call, if first time" --> J["What phone number should<br>we call you at?"]:::blueBox
     J --> J_RESPONSE["PHONE_NUMBER"]:::greyBox
     J_RESPONSE --> K["Okay! We will METHOD you to take MEDICATION_NAME,<br>FREQUENCY at TIME, starting on START_DATE.<br>Additional details: DETAILS<br>Press 1 to confirm, or press 2 to redo this medication"]:::blueBox
-    I --> K
+    I_RESPONSE -- "text, or call if not first time" --> K
 
     K -- "redo" --> L["Please tell me the medication name."]:::blueBox
     L --> E
