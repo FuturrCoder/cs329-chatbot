@@ -9,26 +9,30 @@ graph TD
     G["Okay, your caretaker<br>has been removed."]
     H["Okay."]
     I["Please tell me your<br>caregiver's full name and<br>phone number"]
-    J["CAREGIVER INFO"]
+    J["CAREGIVER_INFO"]
     K["Okay! We will notify this person<br>when you take your medication, and<br>give them access to your<br>medication taking history."]
     L["Would you like to add a<br>caretaker?"]
     M["Please tell me your caregiver's<br>full name and phone number"]
     N["Okay, we will not<br>add a caretaker"]
-    O["I will:<br>• METHOD you to take MNAME, FREQUENCY at TIME,<br>starting on DATE<br>• [If applicable] Additional details: DETAILS<br>• METHOD you to take MNAME, FREQUENCY at TIME,<br>starting on DATE<br>• [If applicable] Additional details: DETAILS<br>..."]
+    O["I will:<br>• METHOD you to take MEDICATION_NAME, FREQUENCY at TIME,<br>starting on DATE<br>• [If applicable] Additional details: DETAILS<br>• METHOD you to take MEDICATION_NAME, FREQUENCY at TIME,<br>starting on DATE<br>• [If applicable] Additional details: DETAILS<br>..."]
     P["Which medication do you<br>want to edit? Or press 1<br>to view medications."]
     Q["Would you like to remove<br>or change the<br>medication?"]
-    R["Okay, we will remove [MNAME]<br>from your list of reminders. Press 1<br>to confirm, or press 2 to cancel"]
+    R["Okay, we will remove [MEDICATION_NAME]<br>from your list of reminders. Press 1<br>to confirm, or press 2 to cancel"]
     S["Removal canceled"]
     T["Medication removed."]
     U["Please tell me the medication name."]
+    MEDICATION_NAME["MEDICATION_NAME"]
     V["When should I remind you to take MEDICATION NAME?"]
-    W["FREQUENCY, TIME"]
+    W["FREQUENCY, TIME, START_DATE"]
     X["On what date do you want your reminders to start?<br>OR<br>How often do you want to be reminded?<br>OR<br>At what time(s) do you want to be reminded?"]
     Y["Would you like to add any details?<br>For example, you can tell us the<br>dosage or instructions for use"]
+    DETAILS["DETAILS"]
     Z["How should I remind you?<br>OPTIONS<br>• Press 1: Message Only<br>• Press 2: Call"]
+    METHOD["METHOD"]
     AA["What phone number should<br>we call you at?"]
-    AB["Okay! We will METHOD you to take MNAME,<br>FREQUENCY at TIME, starting on DATE.<br>Additional details: DETAILS<br>Press 1 to confirm, or press 2 to redo this medication"]
-    AC["Your medication<br>reminders for MNAME<br>have been changed."]
+    PHONE_NUMBER["PHONE_NUMBER"]
+    AB["Okay! We will METHOD you to take MEDICATION_NAME,<br>FREQUENCY at TIME, starting on DATE.<br>Additional details: DETAILS<br>Press 1 to confirm, or press 2 to redo this medication"]
+    AC["Your medication<br>reminders for MEDICATION_NAME<br>have been changed."]
 
 %% Connections
     A -- 1 --> B
@@ -62,7 +66,8 @@ graph TD
 
     Q -- change --> U
 
-    U --> V
+    U --> MEDICATION_NAME
+    MEDICATION_NAME --> V
     V --> W
     W -- if they miss something --> X
     W --> Y
@@ -70,10 +75,13 @@ graph TD
     X -- if they miss something --> X
     X --> Y
 
-    Y --> Z
-    Z -- call, if first time --> AA
-    Z --> AB
-    AA --> AB
+    Y --> DETAILS
+    DETAILS --> Z
+    Z --> METHOD
+    METHOD -- call, if first time --> AA
+    METHOD -- text, or call if not first time --> AB
+    AA --> PHONE_NUMBER
+    PHONE_NUMBER --> AB
 
     AB -- redo --> U
     AB -- "confirm, if they're changing a medication (task 3 only)" --> AC
@@ -82,4 +90,4 @@ graph TD
 classDef default fill:#3898f5,color:#fff,stroke:#2b79c9,stroke-width:1px;
 classDef greyBox fill:#6B7280,color:#fff,stroke:#4b5563,stroke-width:1px;
 
-class W,J greyBox;
+class W,J,MEDICATION_NAME,DETAILS,METHOD,PHONE_NUMBER greyBox;

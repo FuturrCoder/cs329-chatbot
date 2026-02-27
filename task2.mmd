@@ -1,15 +1,26 @@
 graph TD
-    A["Have you taken your<br>cholesterol medication?<br>Additional details: 10mg"]
-    B["Good job! You've successfully taken your<br>medication.<br>This message has been sent to your caretaker."]
-    C["Would you like to be reminded later?"]
-    D["We will call you back in 20<br>minutes. Press 1 to change your<br>reminder"]
-    E["Okay! Please message us when<br>you take your medication"]
-    F["What time would you like to be<br>reminded?"]
-    G["TIME"]
-    H["Okay, I'll remind you again<br>today at TIME."]
+    %% Styling classes
+    classDef blueBox fill:#69a2ff,stroke:#333,stroke-width:1px,color:#fff;
+    classDef greyBox fill:#757575,stroke:#333,stroke-width:1px,color:#fff;
 
-    A -- yes --> B
-    A -- no --> C
+    A["Have you taken your<br>cholesterol medication?<br>Additional details: 10mg"]:::blueBox
+    B["Good job! You've successfully taken your<br>medication.<br>This message has been sent to your caretaker."]:::blueBox
+    C["Would you like to be reminded later?"]:::blueBox
+    D["We will call you back in 20<br>minutes. Press 1 to change your<br>reminder"]:::blueBox
+    E["Okay! Please message us when<br>you take your medication"]:::blueBox
+    F["What time would you like to be<br>reminded?"]:::blueBox
+    G["REMINDER_TIME"]:::greyBox
+    H["Okay, I'll remind you again<br>today at TIME."]:::blueBox
+
+    TAKEN["STATUS: TAKEN"]:::greyBox
+    NOT_TAKEN["STATUS: NOT_TAKEN"]:::greyBox
+
+    A -- yes --> TAKEN
+    TAKEN --> B
+    
+    A -- no --> NOT_TAKEN
+    NOT_TAKEN --> C
+    
     C -- yes --> D
     C -- no --> E
     D -- 1 --> F

@@ -23,7 +23,7 @@ startBtn.addEventListener('click', async () => {
         endBtn.classList.remove('hidden');
         statusText.textContent = 'Connecting...';
 
-        ws = new WebSocket(`ws://${window.location.host}`);
+        ws = new WebSocket(`ws://${window.location.host}/?task=${document.getElementById('taskSelect').value}`);
 
         ws.onopen = async () => {
             statusText.textContent = 'Connected. Speak now!';
