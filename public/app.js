@@ -94,15 +94,14 @@ startBtn.addEventListener('click', async () => {
 
         ws.onmessage = (event) => {
             const response = JSON.parse(event.data);
+
+            if (response.type === 'log') {
+                addTranscript(response.data, 'model');
+            }
+
             if (response.serverContent && response.serverContent.modelTurn) {
                 const parts = response.serverContent.modelTurn.parts;
                 for (const part of parts) {
-                    if (part.text) {
-                        // Avoid logging internal LOG_DATA to UI if possible
-                        if (!part.text.includes("[LOG_DATA:")) {
-                            addTranscript(part.text, 'model');
-                        }
-                    }
                     if (part.inlineData) {
                         playAudioBase64(part.inlineData.data);
                     }

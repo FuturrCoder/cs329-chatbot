@@ -23,26 +23,11 @@ ${flowchart}
 
 INSTRUCTIONS:
 You are interacting with the user via voice. Keep your responses conversational and follow the flowchart exactly.
-Crucially: The system needs to log the collected information in the terminal. In your text responses, whenever you collect new information (like NAME, MNAME, FREQUENCY, TIME, CAREGIVER INFO), please include a data block in your response like this:
-[LOG_DATA: MNAME=Tylenol, FREQUENCY=daily, TIME=8am]
-You will speak the response, but this logged text will be captured by the backend terminal.
+Crucially: The system needs to log the collected information in the terminal. When you collect new information (like NAME, MNAME, FREQUENCY, TIME, CAREGIVER INFO), you MUST use the log_medication_data tool.
 If you don't hear a response or it doesn't make sense, repeat the question. Ask them to spell things out if you don't know the spelling.
 `;
 
 const GEMINI_WS_URL = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent?key=${process.env.GEMINI_API_KEY}`;
-
-// Helper to log extracted data
-function extractAndLogData(text) {
-    const logMatch = text.match(/\[LOG_DATA:\s*(.*?)\]/);
-    if (logMatch) {
-        console.log(`\n\x1b[32m=== COLLECTED INFORMATION ===\x1b[0m`);
-        console.log(`\x1b[32m${logMatch[1]}\x1b[0m`);
-        console.log(`\x1b[32m===============================\x1b[0m\n`);
-    } else {
-        // Just log the text as well for debugging
-        process.stdout.write(text);
-    }
-}
 
 wss.on('connection', (ws) => {
     console.log('Frontend connected.');
@@ -68,7 +53,23 @@ wss.on('connection', (ws) => {
                 },
                 systemInstruction: {
                     parts: [{ text: systemInstructionText }]
-                }
+                },
+                tools: [{
+                    functionDeclarations: [{
+                        name: "log_medication_data",
+                        description: "Logs collected medication and user information to the system. Call this whenever you gather new data like the user's name, medication name, frequency, time, or caregiver info.",
+                        parameters: {
+                            type: "OBJECT",
+                            properties: {
+                                name: { type: "STRING", description: "The name of the user" },
+                                medication_name: { type: "STRING", description: "The name of the medication" },
+                                frequency: { type: "STRING", description: "How often the medication is taken" },
+                                time: { type: "STRING", description: "The time the medication is taken" },
+                                caregiver_info: { type: "STRING", description: "Contact info for the caregiver" }
+                            }
+                        }
+                    }]
+                }]
             }
         };
         geminiWs.send(JSON.stringify(setupMessage));
@@ -91,15 +92,49 @@ wss.on('connection', (ws) => {
             geminiWs.send(JSON.stringify(initialGreeting));
         }
 
+        if (response.toolCall) {
+            const functionCalls = response.toolCall.functionCalls;
+            const toolResponses = [];
+
+            for (const call of functionCalls) {
+                if (call.name === "log_medication_data") {
+                    console.log(`\n\x1b[32m=== COLLECTED INFORMATION (via Tool Call) ===\x1b[0m`);
+                    let logStr = "";
+                    for (const [key, value] of Object.entries(call.args)) {
+                        console.log(`\x1b[32m${key.toUpperCase()}: ${value}\x1b[0m`);
+                        logStr += `${key.toUpperCase()}: ${value}\n`;
+                    }
+                    console.log(`\x1b[32m==============================================\x1b[0m\n`);
+
+                    ws.send(JSON.stringify({ type: 'log', data: logStr.trim() }));
+
+                    toolResponses.push({
+                        id: call.id,
+                        name: call.name,
+                        response: { result: "success" }
+                    });
+                }
+            }
+
+            // Send tool response back to Gemini
+            const toolResponseMessage = {
+                toolResponse: {
+                    functionResponses: toolResponses
+                }
+            };
+            geminiWs.send(JSON.stringify(toolResponseMessage));
+            return; // Don't forward this JSON to the frontend
+        }
+
         // Forward to frontend
         ws.send(data.toString());
 
-        // Parse text for terminal logging
+        // Parse text for terminal logging (e.g. debugging the model's monologue)
         if (response.serverContent && response.serverContent.modelTurn) {
             const parts = response.serverContent.modelTurn.parts;
             for (const part of parts) {
                 if (part.text) {
-                    extractAndLogData(part.text);
+                    process.stdout.write(part.text);
                 }
             }
         }

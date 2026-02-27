@@ -1,0 +1,17 @@
+graph TD
+    A["Have you taken your<br>cholesterol medication?<br>Additional details: 10mg"]
+    B["Good job! You've successfully taken your<br>medication.<br>This message has been sent to your caretaker."]
+    C["Would you like to be reminded later?"]
+    D["We will call you back in 20<br>minutes. Press 1 to change your<br>reminder"]
+    E["Okay! Please message us when<br>you take your medication"]
+    F["What time would you like to be<br>reminded?"]
+    G["TIME"]
+    H["Okay, I'll remind you again<br>today at TIME."]
+
+    A -- yes --> B
+    A -- no --> C
+    C -- yes --> D
+    C -- no --> E
+    D -- 1 --> F
+    F --> G
+    G --> H
