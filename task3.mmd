@@ -2,10 +2,10 @@ graph TD
 %% Node Definitions
     A["Welcome. Press 1 for medication<br>settings, or press 2 for caretaker<br>settings."]
     B["Press 1: Add a medication<br>Press 2: Edit/remove a medication<br>Press 3: List medications"]
-    C["You have set up a caretaker,<br>with phone number NUMBER,<br>who will be notified when you<br>take your medication."]
+    C["You have set up a caretaker. Their info is: CAREGIVER_INFO. <br>They will be notified when you<br>take your medication."]
     D["You do not have a<br>caretaker set up yet."]
     E["Press 1: Change your<br>caretaker<br>Press 2: Remove your<br>caretaker"]
-    F["Are you sure you want to<br>remove your caretaker? They<br>will be no longer be notified<br>when you take your medication.<br>Press 1 to confirm, press 2 to..."]
+    F["Are you sure you want to<br>remove your caretaker? They<br>will be no longer be notified<br>when you take your medication.<br>Press 1 to confirm, press 2 to cancel"]
     G["Okay, your caretaker<br>has been removed."]
     H["Okay."]
     I["Please tell me your<br>caregiver's full name and<br>phone number"]
@@ -14,7 +14,7 @@ graph TD
     L["Would you like to add a<br>caretaker?"]
     M["Please tell me your caregiver's<br>full name and phone number"]
     N["Okay, we will not<br>add a caretaker"]
-    O["I will:<br>• METHOD you to take MEDICATION_NAME, FREQUENCY at TIME,<br>starting on DATE<br>• [If applicable] Additional details: DETAILS<br>• METHOD you to take MEDICATION_NAME, FREQUENCY at TIME,<br>starting on DATE<br>• [If applicable] Additional details: DETAILS<br>..."]
+    O["I will:<br>• METHOD you to take MEDICATION_NAME, FREQUENCY at TIME,<br>starting on START_DATE<br>• [If applicable] Additional details: DETAILS<br>• METHOD you to take MEDICATION_NAME, FREQUENCY at TIME,<br>starting on START_DATE<br>• [If applicable] Additional details: DETAILS<br>..."]
     P["Which medication do you<br>want to edit? Or press 1<br>to view medications."]
     Q["Would you like to remove<br>or change the<br>medication?"]
     R["Okay, we will remove [MEDICATION_NAME]<br>from your list of reminders. Press 1<br>to confirm, or press 2 to cancel"]
@@ -31,7 +31,7 @@ graph TD
     METHOD["METHOD"]
     AA["What phone number should<br>we call you at?"]
     PHONE_NUMBER["PHONE_NUMBER"]
-    AB["Okay! We will METHOD you to take MEDICATION_NAME,<br>FREQUENCY at TIME, starting on DATE.<br>Additional details: DETAILS<br>Press 1 to confirm, or press 2 to redo this medication"]
+    AB["Okay! We will METHOD you to take MEDICATION_NAME,<br>FREQUENCY at TIME, starting on START_DATE.<br>Additional details: DETAILS<br>Press 1 to confirm, or press 2 to redo this medication"]
     AC["Your medication<br>reminders for MEDICATION_NAME<br>have been changed."]
 
 %% Connections

@@ -29,7 +29,16 @@ function getSystemInstructionText(taskId) {
         extraInstructions = "Crucially: The system needs to log the collected information in the terminal. When you collect new information (whether they have taken their medication, and the reminder time if they want one), you MUST use the log_task2_data tool. Make sure to log the reminder time strictly in Central Time (e.g., '3:00 PM CT').";
     } else if (taskId === 3) {
         flowchartPath = path.join(__dirname, 'task3.mmd');
-        extraInstructions = "Crucially: The system needs to log the collected information in the terminal. When you collect new information (MEDICATION_NAME, FREQUENCY, TIME, START_DATE, METHOD, DETAILS, PHONE_NUMBER, CAREGIVER_INFO), you MUST use the log_medication_data tool.";
+
+        const preSetupState = `
+You are already set up for this user. The user's current profile is:
+- Caretaker Info: John Doe, 123-456-7890
+- Medication 1: A cholesterol pill once every two weeks at 6pm, starting tomorrow. Additional details: 10mg.
+- Medication 2: A Metoprolol pill once every day at 8am, starting tomorrow. Additional details: take before breakfast.
+
+Start the conversation acknowledging they are already set up and ask what they would like to do, according to the flowchart.
+`;
+        extraInstructions = `${preSetupState}\nCrucially: The system needs to log the collected information in the terminal. When you collect new information (MEDICATION_NAME, FREQUENCY, TIME, START_DATE, METHOD, DETAILS, PHONE_NUMBER, CAREGIVER_INFO), you MUST use the log_medication_data tool.`;
     } else {
         flowchartPath = path.join(__dirname, 'task1.mmd');
         extraInstructions = "Crucially: The system needs to log the collected information in the terminal. When you collect new information (NAME, MEDICATION_NAME, FREQUENCY, TIME, START_DATE, METHOD, DETAILS, PHONE_NUMBER, CAREGIVER_INFO), you MUST use the log_medication_data tool.";
