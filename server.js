@@ -23,7 +23,7 @@ ${flowchart}
 
 INSTRUCTIONS:
 You are interacting with the user via voice. Keep your responses conversational and follow the flowchart exactly.
-Crucially: The system needs to log the collected information in the terminal. When you collect new information (like NAME, MNAME, FREQUENCY, TIME, CAREGIVER INFO), you MUST use the log_medication_data tool.
+Crucially: The system needs to log the collected information in the terminal. When you collect new information (NAME, MEDICATION_NAME, FREQUENCY, TIME, START_DATE, METHOD, DETAILS, PHONE_NUMBER, CAREGIVER_INFO), you MUST use the log_medication_data tool.
 If you don't hear a response or it doesn't make sense, repeat the question. Ask them to spell things out if you don't know the spelling.
 `;
 

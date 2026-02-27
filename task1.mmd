@@ -8,11 +8,11 @@ graph TD
 
     B --> C["Nice to meet you, NAME!<br>Let's add your first medication. Please<br>tell me the medication name."]:::blueBox
 
-    C --> D["MNAME"]:::greyBox
+    C --> D["MEDICATION_NAME"]:::greyBox
 
     D --> E["When should I remind you to take MEDICATION NAME?"]:::blueBox
 
-    E --> F["FREQUENCY, TIME"]:::greyBox
+    E --> F["FREQUENCY, TIME, START_DATE"]:::greyBox
 
     F -- "if they miss something" --> G["• On what date do you want your reminders to start?<br>OR<br>• How often do you want to be reminded?<br>OR<br>• At what time(s) do you want to be reminded?"]:::blueBox
     G -- "if they miss something" --> G
@@ -23,7 +23,7 @@ graph TD
     H --> I["How should I remind you?<br>OPTIONS<br>• Press 1: Message Only<br>• Press 2: Call"]:::blueBox
 
     I -- "call, if first time" --> J["What phone number should<br>we call you at?"]:::blueBox
-    I --> K["Okay! We will METHOD you to take MNAME,<br>FREQUENCY at TIME, starting on DATE.<br>Additional details: DETAILS<br>Press 1 to confirm, or press 2 to redo this medication"]:::blueBox
+    I --> K["Okay! We will METHOD you to take MEDICATION_NAME,<br>FREQUENCY at TIME, starting on START_DATE.<br>Additional details: DETAILS<br>Press 1 to confirm, or press 2 to redo this medication"]:::blueBox
     J --> K
 
     K -- "redo" --> L["Please tell me the medication name."]:::blueBox
@@ -34,9 +34,9 @@ graph TD
     M -- "yes" --> N["Let's add your [i th] medication. Please<br>tell me the medication name."]:::blueBox
     N --> D
 
-    M -- "view medications" --> O["I will remind you to take:<br>• MNAME, FREQUENCY at TIME<br>• MNAME, FREQUENCY at TIME<br>..."]:::blueBox
+    M -- "view medications" --> O["I will remind you to take:<br>• MEDICATION_NAME, FREQUENCY at TIME<br>• MEDICATION_NAME, FREQUENCY at TIME<br>..."]:::blueBox
 
-    M -- "no" --> P["Okay!<br>I will remind you to take: MNAME, MNAME,<br>..., and MNAME"]:::blueBox
+    M -- "no" --> P["Okay!<br>I will remind you to take: MEDICATION_NAME, MEDICATION_NAME,<br>..., and MEDICATION_NAME"]:::blueBox
     O --> M
 
     P --> Q["Would you like to notify a<br>caregiver about your medication<br>status?<br>OPTIONS<br>• Press 1: Yes<br>• Press 2: No"]:::blueBox
@@ -45,7 +45,7 @@ graph TD
 
     Q -- "Yes" --> S["What is your caregiver's<br>full name and phone<br>number?"]:::blueBox
 
-    S --> T["CAREGIVER INFO"]:::greyBox
+    S --> T["CAREGIVER_INFO"]:::greyBox
     T --> U["Okay! Caregiver notifications are<br>enabled."]:::blueBox
 
     R --> V["You're all set. You can manage your<br>settings anytime by texting us on<br>WhatsApp or calling this number."]:::blueBox
