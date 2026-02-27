@@ -15,9 +15,18 @@ function getSystemInstructionText(taskId) {
     let flowchartPath;
     let extraInstructions = "";
 
+    const now = new Date();
+    const centralTime = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/Chicago',
+        dateStyle: 'full',
+        timeStyle: 'long'
+    }).format(now);
+
+    const timeContext = `The current date and time is ${centralTime}. All times should be in Central Time.`;
+
     if (taskId === 2) {
         flowchartPath = path.join(__dirname, 'task2.mmd');
-        extraInstructions = "Crucially: The system needs to log the collected information in the terminal. When you collect new information (whether they have taken their medication, and the reminder time if they want one), you MUST use the log_task2_data tool.";
+        extraInstructions = "Crucially: The system needs to log the collected information in the terminal. When you collect new information (whether they have taken their medication, and the reminder time if they want one), you MUST use the log_task2_data tool. Make sure to log the reminder time strictly in Central Time (e.g., '3:00 PM CT').";
     } else if (taskId === 3) {
         flowchartPath = path.join(__dirname, 'task3.mmd');
         extraInstructions = "Crucially: The system needs to log the collected information in the terminal. When you collect new information (MEDICATION_NAME, FREQUENCY, TIME, START_DATE, METHOD, DETAILS, PHONE_NUMBER, CAREGIVER_INFO), you MUST use the log_medication_data tool.";
@@ -30,6 +39,8 @@ function getSystemInstructionText(taskId) {
 
     return `
 You are Cheesecake, a medication reminder assistant.
+${timeContext}
+
 You must strictly follow the flow described in this mermaid flowchart:
 
 ${flowchart}
