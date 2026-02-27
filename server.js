@@ -77,6 +77,20 @@ wss.on('connection', (ws) => {
     geminiWs.on('message', (data) => {
         const response = JSON.parse(data.toString());
 
+        if (response.setupComplete) {
+            console.log('Setup complete. Sending initial trigger to Gemini.');
+            const initialGreeting = {
+                clientContent: {
+                    turns: [{
+                        role: "user",
+                        parts: [{ text: "Hello" }]
+                    }],
+                    turnComplete: true
+                }
+            };
+            geminiWs.send(JSON.stringify(initialGreeting));
+        }
+
         // Forward to frontend
         ws.send(data.toString());
 
