@@ -145,11 +145,17 @@ wss.on('connection', (ws, req) => {
 
         if (response.setupComplete) {
             console.log('Setup complete. Sending initial trigger to Gemini.');
+
+            let triggerText = "Hello";
+            if (taskId === 3) {
+                triggerText = "Start the conversation by saying exactly this verbatim: 'Welcome. Press 1 for medication settings, or press 2 for caretaker settings.'";
+            }
+
             const initialGreeting = {
                 clientContent: {
                     turns: [{
                         role: "user",
-                        parts: [{ text: "Hello" }]
+                        parts: [{ text: triggerText }]
                     }],
                     turnComplete: true
                 }
